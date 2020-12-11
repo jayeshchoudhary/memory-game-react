@@ -1,38 +1,71 @@
-.App {
-  text-align: center;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: rgb(0, 161, 153);
+}
+
+.memory-game {
+  width: 650px;
+  height: 525px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  perspective: 1000px;
+  perspective: 1000px;
+}
+
+.memory-card {
+  width: calc(25% - 10px);
+  height: calc(33.333% - 10px);
+  margin: 5px;
+  position: relative;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.memory-card.flip {
+  transform: rotateY(180deg);
+}
+
+.front-face {
+  transform: rotateY(180deg);
+}
+
+.front-face,
+.back-face {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  position: absolute;
+  border-radius: 5px;
+  background: rgb(244, 255, 255);
+  backface-visibility: hidden;
+}
+
+#root {
+  margin: auto;
+  margin-top: 20px;
+}
+
+#root h1 {
+  text-align: center;
   color: white;
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+wrong {
+  border: 3px solid red;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+matched {
+  border: 3px solid green;
 }
