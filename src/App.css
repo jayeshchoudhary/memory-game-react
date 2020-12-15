@@ -10,22 +10,26 @@ body {
   background: rgb(0, 161, 153);
 }
 
-.memory-game {
-  width: 650px;
-  height: 525px;
+#root {
+  display: flex;
+  flex-direction: column;
   margin: auto;
+}
+
+.memory-game {
+  margin: 0 auto;
+  height: 525px;
   display: flex;
   flex-wrap: wrap;
   perspective: 1000px;
-  perspective: 1000px;
+  justify-content: center;
 }
 
 .memory-card {
-  width: calc(25% - 10px);
+  width: 150px;
   height: calc(33.333% - 10px);
   margin: 5px;
   position: relative;
-  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   transform-style: preserve-3d;
   transition: transform 0.5s;
 }
@@ -45,27 +49,66 @@ body {
   padding: 20px;
   position: absolute;
   border-radius: 5px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
   background: rgb(244, 255, 255);
   backface-visibility: hidden;
-}
-
-#root {
-  margin: auto;
-  margin-top: 20px;
 }
 
 #root h1 {
   text-align: center;
   color: white;
-  font-size: 3rem;
-  font-weight: 400;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: 800;
 }
 
-wrong {
-  border: 3px solid red;
+.wrong {
+  border: 2px solid red;
+  background-color: rgb(255, 204, 204);
 }
 
-matched {
-  border: 3px solid green;
+.matched {
+  border: 2px solid green;
+  background-color: rgb(159, 241, 159);
+}
+
+.btn-reset,
+.btn-restart {
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  font-size: 1.2rem;
+  margin: 5px 10px 0 5px;
+  align-items: center;
+}
+
+.btn-reset {
+  background-color: orangered;
+}
+.btn-restart {
+  background-color: red;
+}
+
+.details {
+  width: 45%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 0 10px;
+  color: white;
+  font-size: 1.2rem;
+}
+
+#easy,
+#medium,
+#hard {
+  margin: 5px;
+}
+
+.medium {
+  width: 80%;
+}
+
+.easy {
+  width: 50%;
 }

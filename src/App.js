@@ -1,9 +1,27 @@
 import React, { useState } from "react";
+import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 import Card from "./components/Card";
+import StartModal from "./components/StartModal";
+import Header from "./components/Header";
+import WonPopup from "./components/WonPopup";
 
 function App() {
-  const images = ["angular", "cpp", "java", "mongodb", "python", "react"];
+  const images = [
+    "angular",
+    "cpp",
+    "java",
+    "mongodb",
+    "python",
+    "react",
+    "veu",
+    "javascript",
+    "css",
+    "typescript",
+    "postgresql",
+    "graphql",
+  ];
+  const [level, setLevel] = useState("easy");
 
   // shuffle cards randomly
   function shuffle(array) {
@@ -23,7 +41,8 @@ function App() {
   // populate the cards state
   const getImages = () => {
     const cards = [];
-    for (var i = 0; i < 12; i++) {
+    const number = level === "medium" ? 18 : level === "hard" ? 24 : 12;
+    for (var i = 0; i < number; i++) {
       cards.push({
         id: Math.floor(i / 2),
         img: images[Math.floor(i / 2)],
@@ -34,22 +53,25 @@ function App() {
     return shuffle(cards);
   };
 
-  // cards state
-  const [cards, setCards] = useState(getImages());
-  // state for previously selected card
+  // all the states
+  const [cards, setCards] = useState([]);
   const [previousSelected, setPreviousSelected] = useState(null);
   const [previousSelectedIndex, setPreviousSelectedIndex] = useState(null);
+  const [title, setTitle] = useState("Memory Game");
+  const [playerName, setPlayerName] = useState("");
+  const [started, setStarted] = useState(false);
+  const [totalSteps, setTotalSteps] = useState(0);
+  const [timeTaken, setTimeTaken] = useState(0);
 
   // handler when user clicks the card
   const handleCardClick = (index) => {
+    setStarted(true);
     const currentSelected = cards[index];
     // when there is no previous selected card
     if (!previousSelected) {
-      const newCards = [...cards];
       setPreviousSelected(currentSelected);
       setPreviousSelectedIndex(index);
-      newCards[index].isFlipped = !newCards[index].isFlipped;
-      setCards(newCards);
+      changeIsFlipped(index);
       return;
     }
     // when there is already selected card present
@@ -59,43 +81,112 @@ function App() {
         previousSelected.id === currentSelected.id &&
         index !== previousSelectedIndex
       ) {
-        const newCards = [...cards];
-        newCards[previousSelectedIndex].isMatched = true;
-        newCards[previousSelectedIndex].isFlipped = true;
-        newCards[index].isMatched = true;
-        newCards[index].isFlipped = true;
-        setCards(newCards);
+        changeIsMatched(previousSelectedIndex, true);
+        changeIsMatched(index, true);
+        changeIsFlipped(previousSelectedIndex, true);
+        changeIsFlipped(index, true);
+        if (checkForWin(cards)) {
+          setTimeTaken(Date.now() - timeTaken);
+        }
       }
       // else flip both the cards
       else {
-        const newCards = [...cards];
-        newCards[index].isFlipped = !newCards[index].isFlipped;
-        setCards(newCards);
+        changeIsFlipped(index);
         setTimeout(() => {
-          const newCards = [...cards];
-          newCards[previousSelectedIndex].isFlipped = false;
-          newCards[index].isFlipped = false;
-          setCards(newCards);
-        }, 1000);
+          changeIsFlipped(previousSelectedIndex, false);
+          changeIsFlipped(index, false);
+        }, 800);
       }
       setPreviousSelected(null);
+      setTotalSteps(totalSteps + 1);
     }
+  };
+  // toggle isFlipped
+  const changeIsFlipped = (index, specifiy = null) => {
+    const newCards = [...cards];
+    if (specifiy) {
+      newCards[index].isFlipped = specifiy;
+    } else {
+      newCards[index].isFlipped = !newCards[index].isFlipped;
+    }
+    setCards(newCards);
+  };
+  // toggle isMatched
+  const changeIsMatched = (index, specifiy = null) => {
+    const newCards = [...cards];
+    if (specifiy) {
+      newCards[index].isMatched = specifiy;
+    } else {
+      newCards[index].isMatched = !newCards[index].isMatched;
+    }
+    setCards(newCards);
+  };
+
+  // check if the player won
+  const checkForWin = (cards) => {
+    const isWin = cards.every((card) => card.isMatched === true);
+    return isWin;
+  };
+
+  const startGame = () => {
+    var count = 0;
+    var newCards = getImages();
+    newCards.map((card) => (card.isFlipped = true));
+    setCards(newCards);
+    var interval = setInterval(() => {
+      const newTitle =
+        count === 0
+          ? "Ready"
+          : count === 1
+          ? "Steady"
+          : count === 2
+          ? "Go!!!"
+          : "Memory Game";
+      count++;
+      setTitle(newTitle);
+      if (count === 4) {
+        setTitle(`Welcome "${playerName}" to Memory Game`);
+        newCards.map((card) => (card.isFlipped = false));
+        setCards(newCards);
+        setTimeTaken(Date.now());
+        clearInterval(interval);
+      }
+    }, 1000);
   };
 
   return (
-    <>
-      <h1>Memory Game</h1>
-      <div className="memory-game">
+    <div>
+      <StartModal
+        setPlayerName={setPlayerName}
+        startGame={startGame}
+        setLevel={setLevel}
+        level={level}
+        playerName={playerName}
+      />
+      {cards.length > 1 ? (
+        <Header
+          title={title}
+          totalSteps={totalSteps}
+          level={level}
+          timeTaken={timeTaken}
+        />
+      ) : null}
+      <div className={`memory-game ${level}`}>
         {cards.map((card, index) => (
           <Card
             card={card}
             key={index}
             index={index}
             handleCardClick={handleCardClick}
+            previousSelected={previousSelected}
+            started={started}
           />
         ))}
       </div>
-    </>
+      {checkForWin(cards) && cards.length > 1 ? (
+        <WonPopup totalSteps={totalSteps} timeTaken={timeTaken} />
+      ) : null}
+    </div>
   );
 }
 
