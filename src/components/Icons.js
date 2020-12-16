@@ -10,22 +10,37 @@ import css from "../images/css.png";
 import javascript from "../images/javascript.png";
 import typescript from "../images/typescript.png";
 import postgresql from "../images/postgresql.png";
-import veu from "../images/veu.png";
+import vue from "../images/vue.png";
 
 const getImage = (name) => {
-  if (name === "angular") return angular;
-  else if (name === "cpp") return cpp;
-  else if (name === "java") return java;
-  else if (name === "mongodb") return mongodb;
-  else if (name === "python") return python;
-  else if (name === "react") return react;
-  else if (name === "backImg") return backImg;
-  else if (name === "graphql") return graphql;
-  else if (name === "css") return css;
-  else if (name === "javascript") return javascript;
-  else if (name === "typescript") return typescript;
-  else if (name === "postgresql") return postgresql;
-  else if (name === "veu") return veu;
+  switch (name) {
+    case "angular":
+      return angular;
+    case "cpp":
+      return cpp;
+    case "java":
+      return java;
+    case "mongodb":
+      return mongodb;
+    case "python":
+      return python;
+    case "react":
+      return react;
+    case "graphql":
+      return graphql;
+    case "css":
+      return css;
+    case "javascript":
+      return javascript;
+    case "typescript":
+      return typescript;
+    case "postgresql":
+      return postgresql;
+    case "vue":
+      return vue;
+    default:
+      return backImg;
+  }
 };
 
 export default getImage;

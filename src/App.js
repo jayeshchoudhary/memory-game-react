@@ -14,7 +14,7 @@ function App() {
     "mongodb",
     "python",
     "react",
-    "veu",
+    "vue",
     "javascript",
     "css",
     "typescript",
@@ -154,6 +154,23 @@ function App() {
     }, 1000);
   };
 
+  const reset = () => {
+    const newCards = [...cards];
+    newCards.map((card) => (card.isFlipped = false));
+    newCards.map((card) => (card.isMatched = false));
+    setTotalSteps(0);
+    setPreviousSelected(null);
+    setPreviousSelectedIndex(null);
+    setTimeTaken(Date.now());
+    setCards(newCards);
+    setStarted(false);
+  };
+
+  const restart = () => {
+    reset();
+    startGame();
+  };
+
   return (
     <div>
       <StartModal
@@ -169,6 +186,8 @@ function App() {
           totalSteps={totalSteps}
           level={level}
           timeTaken={timeTaken}
+          reset={reset}
+          restart={restart}
         />
       ) : null}
       <div className={`memory-game ${level}`}>
@@ -184,7 +203,12 @@ function App() {
         ))}
       </div>
       {checkForWin(cards) && cards.length > 1 ? (
-        <WonPopup totalSteps={totalSteps} timeTaken={timeTaken} />
+        <WonPopup
+          totalSteps={totalSteps}
+          timeTaken={timeTaken}
+          level={level}
+          restart={restart}
+        />
       ) : null}
     </div>
   );
