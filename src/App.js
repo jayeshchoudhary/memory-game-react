@@ -62,6 +62,7 @@ function App() {
   const [started, setStarted] = useState(false);
   const [totalSteps, setTotalSteps] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
+  const [won, setWon] = useState(false);
 
   // handler when user clicks the card
   const handleCardClick = (index) => {
@@ -87,6 +88,7 @@ function App() {
         changeIsFlipped(index, true);
         if (checkForWin(cards)) {
           setTimeTaken(Date.now() - timeTaken);
+          setWon(true);
         }
       }
       // else flip both the cards
@@ -155,9 +157,11 @@ function App() {
   };
 
   const reset = () => {
-    const newCards = [...cards];
-    newCards.map((card) => (card.isFlipped = false));
-    newCards.map((card) => (card.isMatched = false));
+    const newCards = cards.map((card) => {
+      card.isMatched = false;
+      card.isFlipped = false;
+      return card;
+    });
     setTotalSteps(0);
     setPreviousSelected(null);
     setPreviousSelectedIndex(null);
@@ -202,7 +206,7 @@ function App() {
           />
         ))}
       </div>
-      {checkForWin(cards) && cards.length > 1 ? (
+      {won && cards.length > 1 ? (
         <WonPopup
           totalSteps={totalSteps}
           timeTaken={timeTaken}
