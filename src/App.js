@@ -14,7 +14,7 @@ function App() {
     "mongodb",
     "python",
     "react",
-    "veu",
+    "vue",
     "javascript",
     "css",
     "typescript",
@@ -62,6 +62,7 @@ function App() {
   const [started, setStarted] = useState(false);
   const [totalSteps, setTotalSteps] = useState(0);
   const [timeTaken, setTimeTaken] = useState(0);
+  const [won, setWon] = useState(false);
 
   // handler when user clicks the card
   const handleCardClick = (index) => {
@@ -87,6 +88,7 @@ function App() {
         changeIsFlipped(index, true);
         if (checkForWin(cards)) {
           setTimeTaken(Date.now() - timeTaken);
+          setWon(true);
         }
       }
       // else flip both the cards
@@ -154,6 +156,26 @@ function App() {
     }, 1000);
   };
 
+  const reset = () => {
+    const newCards = cards.map((card) => {
+      card.isMatched = false;
+      card.isFlipped = false;
+      return card;
+    });
+    setTotalSteps(0);
+    setPreviousSelected(null);
+    setPreviousSelectedIndex(null);
+    setTimeTaken(Date.now());
+    setCards(newCards);
+    setStarted(false);
+    setWon(false);
+  };
+
+  const restart = () => {
+    reset();
+    startGame();
+  };
+
   return (
     <div>
       <StartModal
@@ -169,6 +191,8 @@ function App() {
           totalSteps={totalSteps}
           level={level}
           timeTaken={timeTaken}
+          reset={reset}
+          restart={restart}
         />
       ) : null}
       <div className={`memory-game ${level}`}>
@@ -183,8 +207,13 @@ function App() {
           />
         ))}
       </div>
-      {checkForWin(cards) && cards.length > 1 ? (
-        <WonPopup totalSteps={totalSteps} timeTaken={timeTaken} />
+      {won && cards.length > 1 ? (
+        <WonPopup
+          totalSteps={totalSteps}
+          timeTaken={timeTaken}
+          level={level}
+          restart={restart}
+        />
       ) : null}
     </div>
   );

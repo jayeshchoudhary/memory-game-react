@@ -27,7 +27,7 @@ body {
 
 .memory-card {
   width: 150px;
-  height: calc(33.333% - 10px);
+  height: calc(33% - 10px);
   margin: 5px;
   position: relative;
   transform-style: preserve-3d;
@@ -90,13 +90,17 @@ body {
 }
 
 .details {
-  width: 45%;
+  width: 550px;
   display: flex;
-  justify-content: space-between;
-  margin: 0 auto;
+  margin: 7px auto;
+  justify-content: space-evenly;
   padding: 0 10px;
   color: white;
   font-size: 1.2rem;
+}
+
+.details p {
+  margin: auto 15px auto 10px;
 }
 
 #easy,
@@ -106,9 +110,13 @@ body {
 }
 
 .medium {
-  width: 80%;
+  width: 1000px;
 }
 
 .easy {
-  width: 50%;
+  width: 700px;
+}
+
+.hard {
+  width: 1300px;
 }
