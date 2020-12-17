@@ -168,6 +168,7 @@ function App() {
     setTimeTaken(Date.now());
     setCards(newCards);
     setStarted(false);
+    setWon(false);
   };
 
   const restart = () => {
